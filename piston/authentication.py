@@ -176,10 +176,7 @@ def oauth_user_auth(request):
                 token = oauth_server.authorize_token(token, request.user)
                 args = '?'+token.to_string(only_key=True)
             else:
-                if callback:
-                    args = '?error=%s' % 'Access not granted by user.'
-                else:
-                    return get_callable(callback)(request, token, form) 
+                args = '?error=%s' % 'Access not granted by user.'
             
             if not callback:
                 callback = getattr(settings, 'OAUTH_CALLBACK_VIEW')
