@@ -141,7 +141,7 @@ def oauth_auth_view(request, token, callback, params):
         'oauth_callback': callback,
         })
 
-    return render_to_response('piston/authorize_token.html',
+    return render_to_response('oauth/authorize_token.html',
             { 'form': form }, RequestContext(request))
 
 @login_required
