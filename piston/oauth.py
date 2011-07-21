@@ -613,6 +613,12 @@ class OAuthSignatureMethod_HMAC_SHA1(OAuthSignatureMethod):
         if token:
             key += escape(token.secret)
         raw = '&'.join(sig)
+       
+        # avoid "character mapping must return integer, None or unicode"
+        # when generating HMAC
+        key = key.encode('ascii')
+        raw = raw.encode('ascii')
+
         return key, raw
 
     def build_signature(self, oauth_request, consumer, token):
