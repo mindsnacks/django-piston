@@ -161,7 +161,7 @@ def oauth_request_token(request):
     oauth_server, oauth_request = initialize_server_request(request)
     
     if oauth_server is None:
-        return INVALID_PARAMS_RESPONSE
+        return invalid_params_response()
     try:
         token = oauth_server.fetch_request_token(oauth_request)
 
@@ -185,7 +185,7 @@ def oauth_user_auth(request):
     oauth_server, oauth_request = initialize_server_request(request)
   
     if oauth_request is None:
-        return INVALID_PARAMS_RESPONSE
+        return invalid_params_response()
         
     try:
         token = oauth_server.fetch_request_token(oauth_request)
@@ -232,7 +232,7 @@ def oauth_access_token(request):
     oauth_server, oauth_request = initialize_server_request(request)
     
     if oauth_request is None:
-        return INVALID_PARAMS_RESPONSE
+        return invalid_params_response() 
         
     try:
         token = oauth_server.fetch_access_token(oauth_request)
@@ -240,7 +240,8 @@ def oauth_access_token(request):
     except oauth.OAuthError, err:
         return send_oauth_error(err)
 
-INVALID_PARAMS_RESPONSE = send_oauth_error(oauth.OAuthError('Invalid request parameters.'))
+def invalid_params_response():
+    send_oauth_error(oauth.OAuthError('Invalid request parameters.'))
                 
 class OAuthAuthentication(object):
     """
