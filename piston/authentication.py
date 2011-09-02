@@ -153,7 +153,7 @@ def send_oauth_error(err=None):
         response[k] = v
 
     logger.error("send_oauth_error", exc_info=sys.exc_info(),
-            extra={})
+            extra={'response':response})
 
     return response
 
