@@ -11,8 +11,12 @@ from django.core.urlresolvers import get_callable
 from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+import logging, sys
 
 from piston import forms
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 class NoAuthentication(object):
     """
@@ -148,6 +152,9 @@ def send_oauth_error(err=None):
     for k, v in header.iteritems():
         response[k] = v
 
+    logger.error("send_oauth_error", exc_info=sys.exc_info(),
+            extra={'response':response})
+
     return response
 
 def oauth_request_token(request):
@@ -176,7 +183,7 @@ def oauth_auth_view(request, token, callback, params):
 @login_required
 def oauth_user_auth(request):
     oauth_server, oauth_request = initialize_server_request(request)
-    
+  
     if oauth_request is None:
         return INVALID_PARAMS_RESPONSE
         
@@ -307,7 +314,8 @@ class OAuthAuthentication(object):
 
         auth_params = request.META.get("HTTP_AUTHORIZATION", "")
         req_params = request.REQUEST
-             
+            
+        #logger.error("TEST ERROR", exc_info=sys.exc_info(), extra={})
         return is_in(auth_params) or is_in(req_params)
         
     @staticmethod
