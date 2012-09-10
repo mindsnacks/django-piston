@@ -43,6 +43,7 @@ class Consumer(models.Model):
 
     status = models.CharField(max_length=16, choices=CONSUMER_STATES, default='pending')
     user = models.ForeignKey(User, null=True, blank=True, related_name='consumers')
+    xauth_allowed = models.BooleanField("Allow xAuth", default = False)
 
     objects = ConsumerManager()
         
@@ -145,6 +146,15 @@ class Token(models.Model):
 # Attach our signals
 post_save.connect(consumer_post_save, sender=Consumer)
 post_delete.connect(consumer_post_delete, sender=Consumer)
-admin.site.register(Token)
-admin.site.register(Consumer)
+
+# Add to Admin
+
+class TokenAdmin(admin.ModelAdmin):
+    raw_id_fields = ('user',)
+
+class ConsumerAdmin(admin.ModelAdmin):
+    raw_id_fields = ('user',)
+
+admin.site.register(Token, TokenAdmin)
+admin.site.register(Consumer, ConsumerAdmin)
 admin.site.register(Nonce)
